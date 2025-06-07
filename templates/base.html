@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Tasks App{% endblock %}</title>
+</head>
+<body>
+
+  <nav>
+    <a href="/">Home</a>
+    {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+  <footer>
+    <hr>
+    <p style="text-align:center; font-size:0.8rem;">&copy; 2025 Tasks App</p>
+  </footer>
+
+</body>
+</html>

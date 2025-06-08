@@ -3,37 +3,39 @@
 {% block content %}
   <h1>Tasks</h1>
 
-  <form method="POST">
+  <form method="POST" class="row g-2 mb-4" style="max-width: 500px;">
     {% csrf_token %}
-    <input type="text" name="title" placeholder="Enter new task">
-    <button type="submit">Add</button>
+    <div class="col-auto flex-grow-1">
+      <input type="text" name="title" placeholder="Enter new task" class="form-control" required>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
   </form>
 
-  <ul>
+  <ul class="list-group mb-4">
     {% for task in tasks %}
-      <li>
-        {{ task.title }}
-
-        <form method="POST" action="{% url 'complete_task' task.id %}" style="display: inline;">
-          {% csrf_token %}
-          <button type="submit">
-            {% if task.completed %}
-              ✅
-            {% else %}
-              complete
-            {% endif %}
-          </button>
-        </form>
-
-        <form method="POST" action="{% url 'delete_task' task.id %}" style="display: inline;">
-          {% csrf_token %}
-          <button type="submit" onclick="return confirm('Delete this task?');">
-            🗑️
-          </button>
-        </form>
+      <li class="list-group-item d-flex align-items-center justify-content-between">
+        <span{% if task.completed %} class="text-decoration-line-through text-muted"{% endif %}>
+          {{ task.title }}
+        </span>
+        <div>
+          <form method="POST" action="{% url 'complete_task' task.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm {% if task.completed %}btn-success{% else %}btn-outline-success{% endif %} me-2">
+              {% if task.completed %} ✅ {% else %} ⏳ {% endif %}
+            </button>
+          </form>
+          <form method="POST" action="{% url 'delete_task' task.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this task?');">
+              🗑️
+            </button>
+          </form>
+        </div>
       </li>
     {% empty %}
-      <li>No tasks yet!</li>
+      <li class="list-group-item text-muted">No tasks yet!</li>
     {% endfor %}
   </ul>
 {% endblock %}
